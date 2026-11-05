@@ -1,0 +1,10 @@
+# Dados locais: banco SQLite, sites dos clientes, fotos enviadas e senha gerada do admin
+data/
+# Contas de teste com senhas (só para uso local)
+CONTAS_DE_TESTE.md
+# Configuração local do editor/assistente
+.claude/
+node_modules/
+.DS_Store
+*.log
+.env

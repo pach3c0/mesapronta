@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entrar — MesaPronta</title>
+<meta name="description" content="Acesse o painel do seu restaurante na MesaPronta.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FBF8F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF8F3; --surface:#F3ECE1; --card:#FFFDF9; --ink:#1F1A17; --muted:#6B5E53; --line:#E6DCCD;
+  --accent:#B4442A; --accent-dark:#963620; --accent-ink:#fff; --olive:#4E5B3A; --wa:#25D366; --err:#B42318;
+  --display:"Fraunces",Georgia,serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+h1,h2{font-family:var(--display);font-weight:500;line-height:1.1;margin:0;letter-spacing:-.01em}
+p{margin:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.split{min-height:100%;display:grid;grid-template-columns:1fr 1fr}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+/* Painel da marca */
+.brand{position:relative;overflow:hidden;color:#FBF3E8;padding:40px clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:40px;
+  background:
+    radial-gradient(120% 80% at 100% 0%,rgba(232,150,94,.55),transparent 60%),
+    radial-gradient(90% 70% at 0% 100%,rgba(78,91,58,.85),transparent 65%),
+    linear-gradient(160deg,#B4442A 0%,#7C2B1B 55%,#3A1D14 100%);}
+.brand::before{content:"";position:absolute;inset:0;opacity:.14;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 18v14a6 6 0 0 0 6 6v16M26 18v12M32 18v14a6 6 0 0 1-6 6'/%3E%3Cpath d='M48 54V18c4.4 2 7 7.2 7 14s-3 8-7 8'/%3E%3Ccircle cx='90' cy='32' r='14'/%3E%3Ccircle cx='90' cy='32' r='8'/%3E%3Cpath d='M18 92c8-10 22-10 30 0M14 92h38M33 80v-4'/%3E%3Cpath d='M78 78h24l-3 24H81zM84 78v-6a6 6 0 0 1 12 0v6'/%3E%3C/svg%3E");
+  background-size:120px 120px}
+.brand > *{position:relative}
+.logo{display:inline-flex;align-items:center;gap:9px;font:600 1.35rem/1 var(--display);text-decoration:none;color:#fff;align-self:flex-start}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;flex:none}
+.logo b{color:#F6C9A8;font-weight:600}
+.brand h1{font-size:clamp(2rem,4vw,3.2rem);max-width:460px}
+.brand h1 em{color:#F6C9A8}
+.brand .sub{margin-top:16px;max-width:420px;color:#F1DED0;font-size:1.05rem}
+.quote{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 16px;max-width:420px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.quote .wa{width:38px;height:38px;border-radius:50%;background:var(--wa);display:grid;place-items:center;flex:none;color:#fff}
+.quote small{display:block;color:#EBD6C6;font-size:.82rem}
+.quote strong{font-weight:600;font-size:.95rem}
+@media (max-width:860px){
+  .brand{padding:22px 16px 28px;gap:18px}
+  .brand h1{font-size:1.7rem}
+  .brand .sub,.quote{display:none}
+}
+
+/* Formulário */
+.main{display:flex;flex-direction:column;padding:28px clamp(16px,5vw,64px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.92rem}
+.top a{color:var(--muted);text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:6px;padding:6px 4px}
+.top a:hover{color:var(--ink)}
+.center{flex:1;display:grid;place-items:center;padding:36px 0}
+.card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,5vw,36px);box-shadow:0 1px 2px rgba(31,26,23,.05),0 24px 48px -24px rgba(31,26,23,.22)}
+.card h2{font-size:2rem}
+.card .lead{color:var(--muted);margin:8px 0 26px}
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:7px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.input{width:100%;min-height:48px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font:16px var(--body);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.input::placeholder{color:#A99B8D}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(180,68,42,.14)}
+.input[aria-invalid="true"]{border-color:var(--err)}
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:52px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:transparent;border-radius:10px;cursor:pointer;color:var(--muted);display:grid;place-items:center}
+.pw-toggle:hover{background:var(--surface);color:var(--ink)}
+.linkbtn{background:none;border:0;padding:2px 0;font:500 .86rem var(--body);color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.forgot{display:none;margin:-6px 0 18px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.9rem;color:var(--muted)}
+.forgot.show{display:block}
+.forgot strong{color:var(--ink)}
+.forgot a{color:#128C4A;font-weight:600}
+.error{display:none;margin-bottom:16px;padding:12px 14px;border-radius:12px;background:#FDECEA;color:var(--err);font-weight:500;font-size:.94rem;border:1px solid #F5C2BC}
+.error.show{display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;padding:0 22px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:600 1rem var(--body);cursor:pointer;box-shadow:0 8px 20px -10px rgba(180,68,42,.7);transition:background .2s,transform .2s}
+.btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.btn[disabled]{opacity:.65;cursor:progress;transform:none}
+.spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none}
+.btn.loading .spinner{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.alt{margin-top:22px;text-align:center;color:var(--muted);font-size:.94rem}
+.alt a{color:var(--accent);font-weight:600}
+.foot{text-align:center;color:var(--muted);font-size:.82rem}
+.card{animation:rise .6s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="split">
+  <aside class="brand">
+    <a href="/" class="logo" aria-label="MesaPronta — página inicial">
+      <span class="logo-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B4442A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 3 3v8M7 3v6M10 3v7a3 3 0 0 1-3 3"/><path d="M17 21V3c2.2 1 3.5 3.6 3.5 7S19 14 17 14"/></svg></span>
+      <span>Mesa<b>Pronta</b></span>
+    </a>
+    <div>
+      <h1>Bom te ver de novo. <em>A cozinha está aberta.</em></h1>
+      <p class="sub">Atualize o cardápio, troque as fotos do prato do dia e acompanhe seu site — tudo em um só lugar.</p>
+    </div>
+    <div class="quote" aria-hidden="true">
+      <span class="wa"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span>
+      <span><small>Reserva recebida pelo site</small><strong>“Mesa para 2, sexta às 20h30?”</strong></span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <a href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar para o início</a>
+    </div>
+    <div class="center">
+      <form class="card" id="login" novalidate>
+        <h2>Entrar</h2>
+        <p class="lead">Acesse o painel do seu restaurante.</p>
+        <div class="error" id="error" role="alert"></div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder="voce@restaurante.com.br" autofocus>
+        </div>
+        <div class="field">
+          <div class="row">
+            <label for="password">Senha</label>
+            <button type="button" class="linkbtn" id="forgot-btn" aria-expanded="false" aria-controls="forgot">Esqueci minha senha</button>
+          </div>
+          <div class="pw-wrap">
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Sua senha">
+            <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Mostrar senha" aria-pressed="false"></button>
+          </div>
+        </div>
+        <div class="forgot" id="forgot" aria-live="polite">
+          <strong>Sem problema!</strong> Por enquanto a redefinição de senha é feita pelo nosso suporte. Chame a gente no <strong>WhatsApp do suporte</strong> informando o e-mail da sua conta que ajudamos você rapidinho.
+        </div>
+        <button type="submit" class="btn" id="submit"><span class="spinner" aria-hidden="true"></span><span class="label">Entrar no painel</span></button>
+        <p class="alt">Ainda não tem conta? <a href="/#cadastro">Criar meu site</a></p>
+      </form>
+    </div>
+    <p class="foot">© 2026 MesaPronta</p>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // Já logado? Vai direto para o painel.
+  fetch('/api/me', { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+    .then(function (r) { if (r.status === 200) window.location.replace('/painel'); })
+    .catch(function () {});
+
+  var form = document.getElementById('login');
+  var email = document.getElementById('email');
+  var pass = document.getElementById('password');
+  var err = document.getElementById('error');
+  var btn = document.getElementById('submit');
+  var label = btn.querySelector('.label');
+
+  var eyeOn = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var eyeOff = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  var tog = document.getElementById('pw-toggle');
+  tog.innerHTML = eyeOn;
+  tog.addEventListener('click', function () {
+    var show = pass.type === 'password';
+    pass.type = show ? 'text' : 'password';
+    tog.innerHTML = show ? eyeOff : eyeOn;
+    tog.setAttribute('aria-pressed', String(show));
+    tog.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+  });
+
+  var fb = document.getElementById('forgot-btn'), fbox = document.getElementById('forgot');
+  fb.addEventListener('click', function () {
+    var open = !fbox.classList.contains('show');
+    fbox.classList.toggle('show', open);
+    fb.setAttribute('aria-expanded', String(open));
+  });
+
+  function showError(msg, field) {
+    err.textContent = msg; err.classList.add('show');
+    if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
+  }
+  [email, pass].forEach(function (f) { f.addEventListener('input', function () { f.removeAttribute('aria-invalid'); }); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.classList.remove('show');
+    var data = { email: email.value.trim(), password: pass.value };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return showError('Informe um e-mail válido.', email);
+    if (!data.password) return showError('Informe sua senha.', pass);
+    btn.disabled = true; btn.classList.add('loading'); label.textContent = 'Entrando…';
+    fetch('/api/login', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (res.ok && res.d.ok) { label.textContent = 'Abrindo o painel…'; window.location = res.d.redirect || '/painel'; return; }
+        throw new Error(res.d.error || 'Não foi possível entrar. Tente novamente.');
+      })
+      .catch(function (e2) {
+        showError(e2 && e2.message && e2.message !== 'Failed to fetch' ? e2.message : 'Falha de conexão. Verifique sua internet e tente novamente.');
+        btn.disabled = false; btn.classList.remove('loading'); label.textContent = 'Entrar no painel';
+      });
+  });
+})();
+</script>
+</body>
+</html>

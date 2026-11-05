@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MesaPronta — o site do seu restaurante, pronto em minutos</title>
+<meta name="description" content="Crie o site do seu restaurante com cardápio digital, galeria de pratos e reservas pelo WhatsApp. Pronto em minutos, sem código. 7 dias grátis.">
+<meta property="og:title" content="MesaPronta — o site do seu restaurante, pronto em minutos">
+<meta property="og:description" content="Cardápio digital, galeria e reservas pelo WhatsApp. 7 dias grátis, sem cartão de crédito.">
+<meta name="theme-color" content="#FBF8F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF8F3; --surface:#F3ECE1; --card:#FFFDF9; --ink:#1F1A17; --muted:#6B5E53; --line:#E6DCCD;
+  --accent:#B4442A; --accent-dark:#963620; --accent-ink:#fff; --accent-soft:#F6E2DA;
+  --olive:#4E5B3A; --olive-soft:#E5E8DA; --wa:#25D366; --ok:#2F7D46; --err:#B42318;
+  --radius:18px; --radius-sm:12px; --shadow:0 1px 2px rgba(31,26,23,.05),0 12px 32px -12px rgba(31,26,23,.18);
+  --display:"Fraunces",Georgia,"Times New Roman",serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --gutter:16px; --maxw:1180px; --header-h:68px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 12px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg,iframe{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.1;letter-spacing:-.01em;margin:0}
+p{margin:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-60px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;z-index:100;text-decoration:none}
+.skip:focus{top:12px}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+@media (min-width:720px){:root{--gutter:28px}}
+section{padding:88px 0}
+@media (max-width:720px){section{padding:64px 0}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:18px;height:2px;background:currentColor;border-radius:2px}
+.sec-head{max-width:680px;margin-bottom:44px}
+.sec-head h2{font-size:clamp(2rem,4.2vw,3rem);margin:12px 0 14px}
+.sec-head p{color:var(--muted);font-size:1.08rem}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.sec-head.center .eyebrow::before{display:none}
+
+/* Botões */
+.btn{--h:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--h);padding:0 22px;border-radius:999px;border:1.5px solid transparent;font:600 .98rem/1 var(--body);text-decoration:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .2s,box-shadow .2s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px -10px rgba(180,68,42,.7)}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:#000}
+.btn-sm{--h:40px;padding:0 16px;font-size:.92rem}
+.btn[disabled]{opacity:.6;cursor:progress;transform:none}
+
+/* Header */
+.header{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.header.scrolled{border-bottom-color:var(--line)}
+.header .wrap{display:flex;align-items:center;gap:24px;height:var(--header-h)}
+.logo{display:inline-flex;align-items:center;gap:9px;font:600 1.35rem/1 var(--display);text-decoration:none;color:var(--ink);letter-spacing:-.01em}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center;flex:none}
+.logo b{color:var(--accent);font-weight:600}
+.nav{display:flex;gap:4px;margin-left:12px}
+.nav a{padding:8px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500;font-size:.95rem;transition:color .2s,background .2s}
+.nav a:hover{color:var(--ink);background:var(--surface)}
+.header-cta{margin-left:auto;display:flex;align-items:center;gap:8px}
+.link-entrar{padding:8px 12px;text-decoration:none;font-weight:600;font-size:.95rem;border-radius:999px}
+.link-entrar:hover{background:var(--surface)}
+.burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;place-items:center;margin-left:4px}
+.burger span{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;position:relative;transition:transform .25s,background .25s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger[aria-expanded="true"] span{background:transparent}
+.burger[aria-expanded="true"] span::before{transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span::after{transform:translateY(-6px) rotate(-45deg)}
+.drawer{position:fixed;inset:var(--header-h) 0 auto 0;background:var(--bg);border-bottom:1px solid var(--line);padding:12px var(--gutter) 24px;display:none;flex-direction:column;gap:4px;box-shadow:0 24px 40px -24px rgba(31,26,23,.35);z-index:49}
+.drawer.open{display:flex}
+.drawer a{padding:14px 8px;text-decoration:none;font-weight:500;font-size:1.05rem;border-bottom:1px solid var(--line)}
+.drawer .btn{margin-top:14px}
+@media (max-width:920px){
+  .nav,.header-cta .link-entrar{display:none}
+  .burger{display:grid}
+}
+@media (max-width:420px){.header-cta .btn{display:none}}
+
+/* Hero */
+.hero{padding:56px 0 80px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-20%;top:-30%;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(closest-side,rgba(180,68,42,.12),transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.02fr 1fr;gap:56px;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.3rem,5.4vw,4.1rem);margin:18px 0 20px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lead{font-size:1.14rem;color:var(--muted);max-width:540px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-note{margin-top:14px;font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:8px}
+.hero-note svg{color:var(--olive)}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);padding:6px 12px 6px 6px;border-radius:999px;font-size:.86rem;color:var(--muted)}
+.pill b{background:var(--olive-soft);color:var(--olive);padding:3px 9px;border-radius:999px;font-weight:600;font-size:.78rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px;padding-top:28px;border-top:1px solid var(--line)}
+.stat strong{display:block;font:500 clamp(1.5rem,2.6vw,2rem)/1.1 var(--display);color:var(--ink)}
+.stat span{font-size:.86rem;color:var(--muted)}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr;gap:44px}}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,1fr);row-gap:20px}}
+
+.mock-stage{position:relative;padding-bottom:28px;padding-right:44px}
+.browser{background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow),0 40px 80px -40px rgba(31,26,23,.35);overflow:hidden}
+.browser-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--line)}
+.browser-bar i{width:10px;height:10px;border-radius:50%;background:#E0D3C0;flex:none}
+.browser-bar i:first-child{background:#E8A390}
+.url{flex:1;min-width:0;margin-left:8px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.url b{color:var(--ink);font-weight:600}
+.frame{position:relative;width:100%;overflow:hidden;background:var(--surface)}
+.frame iframe{position:absolute;top:0;left:0;border:0;max-width:none;transform-origin:0 0;pointer-events:none;background:#fff}
+.frame::after{content:"";position:absolute;inset:0}/* bloqueia interação e foco por clique */
+.frame-skeleton{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:.85rem;background:linear-gradient(110deg,var(--surface) 30%,#efe6d8 50%,var(--surface) 70%);background-size:200% 100%;animation:shimmer 1.6s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.frame.loaded .frame-skeleton{display:none}
+.browser .frame{aspect-ratio:16/10}
+.phone{position:absolute;right:0;bottom:0;width:29%;min-width:120px;max-width:200px;background:#1F1A17;border-radius:28px;padding:8px;box-shadow:0 30px 60px -20px rgba(31,26,23,.55)}
+.phone .frame{aspect-ratio:9/19;border-radius:21px}
+.phone::before{content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);width:34%;height:12px;background:#1F1A17;border-radius:0 0 10px 10px;z-index:2}
+.float-tag{position:absolute;left:-14px;bottom:56px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);font-size:.85rem;font-weight:500;z-index:3}
+.float-tag .wa-dot{width:32px;height:32px;border-radius:50%;background:var(--wa);display:grid;place-items:center;color:#fff;flex:none}
+.float-tag small{display:block;color:var(--muted);font-weight:400;font-size:.76rem}
+@media (max-width:560px){.mock-stage{padding-right:28px}.float-tag{left:0;bottom:-6px}.phone{min-width:96px}}
+
+/* Features */
+.features{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:920px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.feat-grid{grid-template-columns:1fr}}
+.feat{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.feat:hover,.feat.reveal.in:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#dccfbb}
+.feat .ico{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:18px}
+.feat:nth-child(even) .ico{background:var(--olive-soft);color:var(--olive)}
+.feat .ico.wa{background:#DDF6E6;color:#128C4A}
+.feat h3{font-size:1.32rem;margin-bottom:8px}
+.feat p{color:var(--muted);font-size:.97rem}
+
+/* Modelos */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tab{display:inline-flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font:600 .95rem var(--body);color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s}
+.tab:hover{border-color:#cdbfa9}
+.tab[aria-selected="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.sw{display:inline-flex;border-radius:999px;overflow:hidden;border:1px solid rgba(0,0,0,.08);flex:none}
+.sw i{width:11px;height:22px;display:block}
+.model-panel{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:center}
+.model-panel[hidden]{display:none}
+@media (max-width:900px){.model-panel{grid-template-columns:1fr}}
+.model-info h3{font-size:2rem;margin-bottom:10px}
+.model-info p{color:var(--muted)}
+.model-info ul{list-style:none;padding:0;margin:18px 0 24px;display:grid;gap:8px}
+.model-info li{display:flex;gap:10px;align-items:flex-start;font-size:.97rem}
+.model-info li svg{flex:none;margin-top:4px;color:var(--olive)}
+.model-actions{display:flex;flex-wrap:wrap;gap:10px}
+.custom-note{margin-top:32px;display:flex;gap:16px;align-items:center;background:var(--surface);border:1px dashed #d7c8b2;border-radius:var(--radius);padding:18px 22px;color:var(--muted)}
+.custom-note strong{color:var(--ink)}
+.custom-note .palette{display:flex;flex:none}
+.custom-note .palette i{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);margin-left:-8px}
+.custom-note .palette i:first-child{margin-left:0}
+@media (max-width:560px){.custom-note{flex-direction:column;align-items:flex-start}}
+
+/* Como funciona */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:step;position:relative}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+.step-n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff;font:500 1.2rem var(--display);margin-bottom:18px}
+.step h3{font-size:1.35rem;margin-bottom:8px}
+.step p{color:var(--muted);font-size:.97rem}
+.step .arrow{position:absolute;right:-17px;top:40px;width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);z-index:1}
+.step:last-child .arrow{display:none}
+@media (max-width:860px){.step .arrow{right:auto;left:40px;top:auto;bottom:-17px;transform:rotate(90deg)}}
+
+/* Planos */
+.plans-sec{background:var(--surface)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media (max-width:920px){.plans{grid-template-columns:1fr;max-width:480px;margin:0 auto}}
+.plan{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px 26px;display:flex;flex-direction:column}
+.plan.featured{border:2px solid var(--accent);box-shadow:0 30px 60px -30px rgba(180,68,42,.45)}
+@media (min-width:921px){.plan.featured{transform:translateY(-10px)}}
+.badge{position:absolute;top:-13px;left:26px;background:var(--accent);color:#fff;font-size:.76rem;font-weight:700;letter-spacing:.04em;padding:5px 12px;border-radius:999px}
+.plan h3{font-size:1.5rem}
+.plan .tag{color:var(--muted);font-size:.92rem;margin-top:4px;min-height:1.5em}
+.price{margin:22px 0 4px;display:flex;align-items:baseline;gap:6px}
+.price strong{font:500 2.9rem/1 var(--display)}
+.price span{color:var(--muted)}
+.trial{font-size:.86rem;color:var(--olive);font-weight:600}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:10px;flex:1}
+.plan li{display:flex;gap:10px;font-size:.95rem}
+.plan li svg{flex:none;margin-top:4px;color:var(--accent)}
+.plan .btn{width:100%}
+.plans-foot{text-align:center;color:var(--muted);margin-top:28px;font-size:.92rem}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
+@media (max-width:860px){.faq-grid{grid-template-columns:1fr;gap:12px}}
+.faq{display:grid;gap:12px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+.faq summary{list-style:none;cursor:pointer;padding:18px 20px;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .pm{flex:none;width:26px;height:26px;border-radius:50%;background:var(--surface);display:grid;place-items:center;transition:transform .25s,background .25s}
+.faq details[open] summary .pm{transform:rotate(45deg);background:var(--accent-soft);color:var(--accent)}
+.faq .ans{padding:0 20px 20px;color:var(--muted)}
+.faq summary:focus-visible{outline-offset:-3px}
+
+/* CTA band */
+.cta-band{padding:0}
+.cta-box{background:var(--ink);color:#fff;border-radius:28px;padding:56px clamp(24px,5vw,64px);display:grid;grid-template-columns:1.4fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-box::before{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(closest-side,rgba(180,68,42,.55),transparent)}
+.cta-box h2{font-size:clamp(1.9rem,3.8vw,2.8rem);position:relative}
+.cta-box p{color:#CFC4B8;margin-top:12px;position:relative}
+.cta-box .btn{position:relative}
+@media (max-width:760px){.cta-box{grid-template-columns:1fr}}
+
+/* Cadastro */
+.signup-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start}
+@media (max-width:920px){.signup-grid{grid-template-columns:1fr;gap:28px}}
+.signup-aside h2{font-size:clamp(2rem,4vw,2.9rem);margin:12px 0 14px}
+.signup-aside > p{color:var(--muted)}
+.perks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px}
+.perks li{display:flex;gap:12px;align-items:flex-start}
+.perks .dot{flex:none;width:28px;height:28px;border-radius:50%;background:var(--olive-soft);color:var(--olive);display:grid;place-items:center}
+.form-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,36px);box-shadow:var(--shadow)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fgrid .full{grid-column:1/-1}
+@media (max-width:600px){.fgrid{grid-template-columns:1fr}}
+.field label,.field .lbl{display:block;font-weight:600;font-size:.9rem;margin-bottom:7px}
+.input{width:100%;min-height:48px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font:16px var(--body);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.input::placeholder{color:#A99B8D}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(180,68,42,.14)}
+.input[aria-invalid="true"]{border-color:var(--err)}
+select.input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B5E53' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.slug-wrap{display:flex;align-items:stretch;border:1.5px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.slug-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(180,68,42,.14)}
+.slug-wrap.bad{border-color:var(--err)}
+.slug-wrap.good{border-color:var(--ok)}
+.slug-wrap input{flex:1;min-width:0;border:0;outline:none;padding:12px 4px 12px 14px;font:16px var(--body);background:transparent;color:var(--ink)}
+.slug-wrap .suffix{display:flex;align-items:center;padding:0 14px 0 2px;color:var(--muted);font-size:.92rem;white-space:nowrap;background:#fff}
+@media (max-width:400px){.slug-wrap .suffix{font-size:.8rem;padding-right:10px}}
+.hint{font-size:.84rem;color:var(--muted);margin-top:6px;min-height:1.3em}
+.hint.ok{color:var(--ok);font-weight:600}
+.hint.bad{color:var(--err);font-weight:600}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:600px){.chips{grid-template-columns:repeat(2,1fr)}}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip label{display:flex;flex-direction:column;gap:8px;padding:12px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;background:#fff;font-weight:600;font-size:.92rem;margin:0;transition:border-color .2s,box-shadow .2s}
+.chip label:hover{border-color:#cdbfa9}
+.chip .sw i{height:18px;width:100%}
+.chip .sw{display:flex;width:100%}
+.chip input:checked + label{border-color:var(--accent);box-shadow:0 0 0 3px rgba(180,68,42,.16)}
+.chip input:focus-visible + label{outline:3px solid var(--accent);outline-offset:2px}
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:52px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:transparent;border-radius:10px;cursor:pointer;color:var(--muted);display:grid;place-items:center}
+.pw-toggle:hover{background:var(--surface);color:var(--ink)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted)}
+.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.form-error{display:none;margin-top:18px;padding:12px 14px;border-radius:12px;background:#FDECEA;color:var(--err);font-weight:500;font-size:.94rem;border:1px solid #F5C2BC}
+.form-error.show{display:block}
+.form-foot{margin-top:22px;display:flex;flex-direction:column;gap:14px}
+.form-foot .btn{width:100%;--h:54px;font-size:1.02rem}
+.form-foot p{text-align:center;color:var(--muted);font-size:.94rem}
+.form-foot a{color:var(--accent);font-weight:600}
+.spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none}
+.btn.loading .spinner{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Footer */
+.footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:88px}
+.footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.footer p{color:var(--muted);font-size:.94rem;margin-top:10px;max-width:340px}
+.footer nav{display:flex;flex-wrap:wrap;gap:6px 22px}
+.footer nav a{text-decoration:none;color:var(--muted);font-weight:500}
+.footer nav a:hover{color:var(--ink)}
+.footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+.hero-grid>*,.signup-grid>*,.fgrid>*,.faq-grid>*,.model-panel>*,.feat-grid>*,.plans>*,.steps>*,.chips>*{min-width:0}
+select.input{min-width:0;max-width:100%}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+.no-js .reveal{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="header" id="topo">
+  <div class="wrap">
+    <a href="/" class="logo" aria-label="MesaPronta — início">
+      <span class="logo-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 3 3v8M7 3v6M10 3v7a3 3 0 0 1-3 3"/><path d="M17 21V3c2.2 1 3.5 3.6 3.5 7S19 14 17 14"/></svg></span>
+      <span>Mesa<b>Pronta</b></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#modelos">Modelos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#planos">Planos</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <div class="header-cta">
+      <a href="/entrar" class="link-entrar">Entrar</a>
+      <a href="#cadastro" class="btn btn-primary btn-sm">Criar meu site</a>
+      <button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
+    </div>
+  </div>
+  <div class="drawer" id="drawer" aria-label="Menu">
+    <a href="#modelos">Modelos</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#planos">Planos</a>
+    <a href="#duvidas">Dúvidas</a>
+    <a href="/entrar">Entrar</a>
+    <a href="#cadastro" class="btn btn-primary">Criar meu site</a>
+  </div>
+</header>
+
+<main id="conteudo">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="pill"><b>Novo</b> Feito para restaurantes, bares e cafés</span>
+      <h1>O site do seu restaurante, <em>lindo</em> e pronto em minutos.</h1>
+      <p class="lead">Cardápio digital, galeria de pratos e reservas direto no seu WhatsApp. Você escolhe o modelo, coloca suas fotos e publica — sem escrever uma linha de código.</p>
+      <div class="hero-ctas">
+        <a href="#cadastro" class="btn btn-primary">Começar grátis
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#modelos" class="btn btn-ghost">Ver modelos</a>
+      </div>
+      <p class="hero-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>7 dias grátis. Sem cartão de crédito.</p>
+      <div class="stats">
+        <div class="stat"><strong>7 dias</strong><span>grátis</span></div>
+        <div class="stat"><strong>5 min</strong><span>para publicar</span></div>
+        <div class="stat"><strong>4</strong><span>modelos prontos</span></div>
+        <div class="stat"><strong>0</strong><span>código</span></div>
+      </div>
+    </div>
+    <div class="mock-stage reveal" aria-label="Prévia de um site criado com a MesaPronta">
+      <div class="browser">
+        <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b>casaoliva</b>.mesapronta.com.br</span></div>
+        <div class="frame" data-src="/demo/elegante" data-w="1280" data-h="800">
+          <div class="frame-skeleton">Carregando prévia…</div>
+        </div>
+      </div>
+      <div class="phone" aria-hidden="true">
+        <div class="frame" data-src="/demo/moderno" data-w="390" data-h="823"><div class="frame-skeleton"></div></div>
+      </div>
+      <div class="float-tag" aria-hidden="true">
+        <span class="wa-dot"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"/></svg></span>
+        <span>Nova reserva<small>Mesa para 4 · sáb. 20h</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECURSOS -->
+<section class="features" id="recursos">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Recursos</span>
+      <h2>Tudo que seu restaurante precisa</h2>
+      <p>Um site completo, pensado para quem vive de cozinha — não de tecnologia.</p>
+    </div>
+    <div class="feat-grid">
+      <article class="feat reveal">
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3V3Z"/><path d="M5 18a3 3 0 0 1 3-3h11M9 7h6M9 10h4"/></svg></div>
+        <h3>Cardápio digital</h3>
+        <p>Comidas e bebidas organizadas por categorias, com descrição e preço. Atualize um valor em segundos, sem reimprimir nada.</p>
+      </article>
+      <article class="feat reveal">
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></div>
+        <h3>Conceito / Nossa história</h3>
+        <p>Uma área livre para contar quem está por trás do fogão, de onde vêm os ingredientes e o que torna sua casa especial.</p>
+      </article>
+      <article class="feat reveal">
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></div>
+        <h3>Galeria de pratos</h3>
+        <p>Mostre seus pratos, o salão e a equipe em uma galeria bonita, que fica ótima no celular e abre as fotos em tela cheia.</p>
+      </article>
+      <article class="feat reveal">
+        <div class="ico wa" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5 5 16a8.5 8.5 0 1 1 3 3l-4.5 1.5Z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5l1-1.2 2 1-.5 1.7c-3.5.3-7.8-4-7.5-7.5l1.7-.5 1 2L9 9.5Z"/></svg></div>
+        <h3>Reserva pelo WhatsApp</h3>
+        <p>Botão “Reservar” no topo e um botão flutuante em todas as páginas. O cliente toca e já cai no seu WhatsApp com a mensagem pronta.</p>
+      </article>
+      <article class="feat reveal">
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+        <h3>Mapa e contato</h3>
+        <p>Endereço, horários de funcionamento, telefone, redes sociais e o mapa do Google Maps para o cliente chegar sem se perder.</p>
+      </article>
+      <article class="feat reveal">
+        <div class="ico" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3M7 9h4M7 12h7"/><path d="m15 8 2 2"/></svg></div>
+        <h3>Painel simples</h3>
+        <p>Você mesmo edita textos, preços e fotos e vê o resultado ao vivo, antes de publicar. Sem depender de ninguém.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MODELOS -->
+<section id="modelos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Modelos</span>
+      <h2>4 modelos. Suas cores.</h2>
+      <p>Escolha o estilo que combina com a sua casa. Cada modelo pode ser personalizado com as cores e fontes da sua marca — e você pode trocar quando quiser.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Modelos de site">
+      <button class="tab" role="tab" id="tab-elegante" aria-controls="panel-elegante" aria-selected="true" data-theme="elegante"><span class="sw" aria-hidden="true"><i style="background:#1E2B24"></i><i style="background:#B08D57"></i><i style="background:#F4EFE6"></i></span>Elegante</button>
+      <button class="tab" role="tab" id="tab-moderno" aria-controls="panel-moderno" aria-selected="false" tabindex="-1" data-theme="moderno"><span class="sw" aria-hidden="true"><i style="background:#141414"></i><i style="background:#FF5A36"></i><i style="background:#FFFFFF"></i></span>Moderno</button>
+      <button class="tab" role="tab" id="tab-industrial" aria-controls="panel-industrial" aria-selected="false" tabindex="-1" data-theme="industrial"><span class="sw" aria-hidden="true"><i style="background:#2B2B2B"></i><i style="background:#C26A2D"></i><i style="background:#D9D4CC"></i></span>Industrial</button>
+      <button class="tab" role="tab" id="tab-minimalista" aria-controls="panel-minimalista" aria-selected="false" tabindex="-1" data-theme="minimalista"><span class="sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#111111"></i><i style="background:#E8E2D8"></i></span>Minimalista</button>
+    </div>
+    <div id="model-panels"></div>
+    <div class="custom-note reveal">
+      <span class="palette" aria-hidden="true"><i style="background:#B4442A"></i><i style="background:#4E5B3A"></i><i style="background:#D9A441"></i><i style="background:#1F1A17"></i></span>
+      <p><strong>Todos os modelos são personalizáveis.</strong> Troque cores, fontes, fotos e textos no painel. Seu site fica com a cara do seu restaurante, não com cara de modelo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Como funciona</span>
+      <h2>Do zero ao ar em 3 passos</h2>
+      <p>Sem agência, sem programador, sem dor de cabeça.</p>
+    </div>
+    <ol class="steps" style="list-style:none;padding:0;margin:0">
+      <li class="step reveal">
+        <div class="step-n">1</div>
+        <h3>Crie sua conta</h3>
+        <p>Informe seus dados e escolha o endereço do seu site, como <strong>seurestaurante.mesapronta.com.br</strong>.</p>
+        <span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </li>
+      <li class="step reveal">
+        <div class="step-n">2</div>
+        <h3>Monte seu site no painel</h3>
+        <p>Cadastre o cardápio, suba as fotos, escreva o conceito da casa e informe o seu WhatsApp.</p>
+        <span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </li>
+      <li class="step reveal">
+        <div class="step-n">3</div>
+        <h3>Publique e receba reservas</h3>
+        <p>Compartilhe o link no Instagram e no Google. Os pedidos de reserva chegam direto no seu WhatsApp.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section id="planos" class="plans-sec">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Planos</span>
+      <h2>Preço justo, sem surpresa</h2>
+      <p id="plans-sub">Comece com 7 dias grátis em qualquer plano. Sem fidelidade.</p>
+    </div>
+    <div class="plans" id="plans" aria-live="polite"></div>
+    <p class="plans-foot">Pagamento mensal por PIX, boleto ou cartão, só depois do período grátis.</p>
+  </div>
+</section>
+
+<!-- DÚVIDAS -->
+<section id="duvidas">
+  <div class="wrap faq-grid">
+    <div class="sec-head reveal" style="margin-bottom:0">
+      <span class="eyebrow">Dúvidas</span>
+      <h2>Perguntas frequentes</h2>
+      <p>Não achou o que procurava? Crie sua conta grátis e fale com o suporte pelo painel.</p>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>Preciso saber programar? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">Não. Você escolhe um modelo e preenche tudo em formulários simples no painel: textos, preços, fotos e horários. Se sabe usar o WhatsApp, sabe usar a MesaPronta.</div>
+      </details>
+      <details>
+        <summary>Posso trocar o modelo depois? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">Pode, quantas vezes quiser. Seu conteúdo continua o mesmo — só muda o visual. Dá também para ajustar cores e fontes de qualquer modelo.</div>
+      </details>
+      <details>
+        <summary>Posso usar meu próprio domínio? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">Sim. No plano Premium você pode usar um domínio próprio (como www.seurestaurante.com.br). Fale com o nosso suporte que ajudamos na configuração. Nos demais planos, seu site fica em seurestaurante.mesapronta.com.br.</div>
+      </details>
+      <details>
+        <summary>Como funciona a reserva? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">O cliente toca em “Reservar” e o WhatsApp do restaurante abre com uma mensagem pronta pedindo a reserva. Você confirma por lá mesmo, do jeito que já está acostumado.</div>
+      </details>
+      <details>
+        <summary>Como eu pago? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">Depois dos 7 dias grátis, a mensalidade pode ser paga por PIX, boleto ou cartão. Não pedimos cartão de crédito para começar.</div>
+      </details>
+      <details>
+        <summary>Posso cancelar quando quiser? <span class="pm" aria-hidden="true">+</span></summary>
+        <div class="ans">Sim, sem multa e sem fidelidade. Você cancela quando quiser e não há cobrança no mês seguinte.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div>
+        <h2>Sua mesa está pronta. Falta o seu site.</h2>
+        <p>Crie agora e publique ainda hoje. 7 dias grátis, sem cartão de crédito.</p>
+      </div>
+      <a href="#cadastro" class="btn btn-primary">Criar meu site grátis</a>
+    </div>
+  </div>
+</section>
+
+<!-- CADASTRO -->
+<section id="cadastro">
+  <div class="wrap signup-grid">
+    <div class="signup-aside reveal">
+      <span class="eyebrow">Cadastro</span>
+      <h2>Crie seu site</h2>
+      <p>Leva menos de 2 minutos. Depois é só entrar no painel e deixar tudo com a cara do seu restaurante.</p>
+      <ul class="perks">
+        <li><span class="dot" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>7 dias grátis</strong><br><span style="color:var(--muted)">Teste tudo sem informar cartão.</span></span></li>
+        <li><span class="dot" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>Site já montado</strong><br><span style="color:var(--muted)">Começamos com um conteúdo de exemplo para você só adaptar.</span></span></li>
+        <li><span class="dot" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>Troque de plano ou modelo</strong><br><span style="color:var(--muted)">Quando quiser, direto no painel.</span></span></li>
+      </ul>
+    </div>
+
+    <form class="form-card reveal" id="signup" novalidate>
+      <div class="fgrid">
+        <div class="field">
+          <label for="f-name">Seu nome</label>
+          <input class="input" id="f-name" name="name" autocomplete="name" required maxlength="120" placeholder="Maria Souza">
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail</label>
+          <input class="input" id="f-email" name="email" type="email" autocomplete="email" required maxlength="160" placeholder="voce@restaurante.com.br">
+        </div>
+        <div class="field">
+          <label for="f-phone">WhatsApp</label>
+          <input class="input" id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" required placeholder="(11) 99999-9999" maxlength="15">
+        </div>
+        <div class="field">
+          <label for="f-restaurant">Nome do restaurante</label>
+          <input class="input" id="f-restaurant" name="restaurant" required maxlength="120" placeholder="Cantina da Nonna">
+        </div>
+        <div class="field full">
+          <label for="f-slug">Endereço do site</label>
+          <div class="slug-wrap" id="slug-wrap">
+            <input id="f-slug" name="slug" required maxlength="40" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="cantina-da-nonna" aria-describedby="slug-hint">
+            <span class="suffix" aria-hidden="true">.mesapronta.com.br</span>
+          </div>
+          <p class="hint" id="slug-hint" aria-live="polite">Letras minúsculas, números e hífens.</p>
+        </div>
+        <fieldset class="field full" style="border:0;padding:0;margin:0">
+          <legend class="lbl" style="padding:0">Modelo</legend>
+          <div class="chips">
+            <div class="chip"><input type="radio" name="theme" id="t-elegante" value="elegante" checked><label for="t-elegante"><span class="sw" aria-hidden="true"><i style="background:#1E2B24"></i><i style="background:#B08D57"></i><i style="background:#F4EFE6"></i></span>Elegante</label></div>
+            <div class="chip"><input type="radio" name="theme" id="t-moderno" value="moderno"><label for="t-moderno"><span class="sw" aria-hidden="true"><i style="background:#141414"></i><i style="background:#FF5A36"></i><i style="background:#FFFFFF"></i></span>Moderno</label></div>
+            <div class="chip"><input type="radio" name="theme" id="t-industrial" value="industrial"><label for="t-industrial"><span class="sw" aria-hidden="true"><i style="background:#2B2B2B"></i><i style="background:#C26A2D"></i><i style="background:#D9D4CC"></i></span>Industrial</label></div>
+            <div class="chip"><input type="radio" name="theme" id="t-minimalista" value="minimalista"><label for="t-minimalista"><span class="sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#111111"></i><i style="background:#E8E2D8"></i></span>Minimalista</label></div>
+          </div>
+        </fieldset>
+        <div class="field full">
+          <label for="f-plan">Plano</label>
+          <select class="input" id="f-plan" name="plan">
+            <option value="essencial">Essencial — R$ 49/mês</option>
+            <option value="profissional" selected>Profissional — R$ 79/mês</option>
+            <option value="premium">Premium — R$ 129/mês</option>
+          </select>
+          <p class="hint">Você só paga depois dos 7 dias grátis.</p>
+        </div>
+        <div class="field">
+          <label for="f-pass">Senha</label>
+          <div class="pw-wrap">
+            <input class="input" id="f-pass" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo de 8 caracteres">
+            <button type="button" class="pw-toggle" data-target="f-pass" aria-label="Mostrar senha" aria-pressed="false"></button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-pass2">Confirmar senha</label>
+          <div class="pw-wrap">
+            <input class="input" id="f-pass2" name="password2" type="password" autocomplete="new-password" required minlength="8" placeholder="Repita a senha">
+            <button type="button" class="pw-toggle" data-target="f-pass2" aria-label="Mostrar senha" aria-pressed="false"></button>
+          </div>
+        </div>
+        <div class="field full">
+          <label class="check" for="f-terms"><input type="checkbox" id="f-terms" name="terms" required><span>Li e aceito os termos de uso e a política de privacidade da MesaPronta.</span></label>
+        </div>
+      </div>
+      <div class="form-error" id="form-error" role="alert"></div>
+      <div class="form-foot">
+        <button type="submit" class="btn btn-primary" id="submit-btn"><span class="spinner" aria-hidden="true"></span><span class="label">Criar meu site grátis</span></button>
+        <p>Já tem conta? <a href="/entrar">Entrar</a></p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <a href="/" class="logo" aria-label="MesaPronta — início">
+          <span class="logo-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 3 3v8M7 3v6M10 3v7a3 3 0 0 1-3 3"/><path d="M17 21V3c2.2 1 3.5 3.6 3.5 7S19 14 17 14"/></svg></span>
+          <span>Mesa<b>Pronta</b></span>
+        </a>
+        <p>Sites bonitos para restaurantes, com cardápio digital e reservas pelo WhatsApp.</p>
+      </div>
+      <nav aria-label="Rodapé">
+        <a href="#modelos">Modelos</a>
+        <a href="#planos">Planos</a>
+        <a href="#duvidas">Dúvidas</a>
+        <a href="/entrar">Entrar</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MesaPronta. Todos os direitos reservados.</span>
+      <span>Feito com carinho para quem cozinha.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Header + menu mobile ---------- */
+  var header = $('.header');
+  var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 8); };
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  var burger = $('.burger'), drawer = $('#drawer');
+  function setDrawer(open) {
+    drawer.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  }
+  burger.addEventListener('click', function () { setDrawer(!drawer.classList.contains('open')); });
+  $$('a', drawer).forEach(function (a) { a.addEventListener('click', function () { setDrawer(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('open')) { setDrawer(false); burger.focus(); } });
+  window.addEventListener('resize', function () { if (window.innerWidth > 920) setDrawer(false); });
+
+  /* ---------- Iframes escalados ---------- */
+  function mountFrame(box) {
+    if (box.dataset.mounted) return;
+    box.dataset.mounted = '1';
+    var w = Number(box.dataset.w) || 1280, h = Number(box.dataset.h) || 800;
+    var ifr = document.createElement('iframe');
+    ifr.src = box.dataset.src;
+    ifr.title = 'Prévia do modelo';
+    ifr.setAttribute('loading', 'lazy');
+    ifr.setAttribute('tabindex', '-1');
+    ifr.setAttribute('aria-hidden', 'true');
+    ifr.setAttribute('scrolling', 'no');
+    ifr.width = w; ifr.height = h;
+    ifr.style.width = w + 'px'; ifr.style.height = h + 'px';
+    ifr.addEventListener('load', function () { box.classList.add('loaded'); });
+    box.insertBefore(ifr, box.firstChild);
+    var fit = function () {
+      var cw = box.clientWidth; if (!cw) return;
+      var s = cw / w;
+      ifr.style.transform = 'scale(' + s + ')';
+    };
+    fit();
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(box);
+    else window.addEventListener('resize', fit);
+  }
+  function lazyFrames(root) {
+    var boxes = $$('.frame[data-src]', root);
+    if (!('IntersectionObserver' in window)) { boxes.forEach(mountFrame); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { mountFrame(en.target); io.unobserve(en.target); } });
+    }, { rootMargin: '300px 0px' });
+    boxes.forEach(function (b) { io.observe(b); });
+  }
+
+  /* ---------- Modelos ---------- */
+  var MODELS = {
+    elegante: { name: 'Elegante', text: 'Tipografia clássica, tons profundos e detalhes dourados. Perfeito para bistrôs, cantinas e casas de jantar.', points: ['Serifas sofisticadas e muito respiro', 'Fotos em destaque com sobreposição suave', 'Ideal para alta gastronomia e vinhos'] },
+    moderno: { name: 'Moderno', text: 'Visual leve e vibrante, com blocos de cor e cartões arredondados. Combina com hamburguerias, poke e cafés.', points: ['Cores vivas e botões chamativos', 'Cardápio em cartões fácil de navegar', 'Ótimo para públicos jovens e delivery'] },
+    industrial: { name: 'Industrial', text: 'Texturas escuras, contraste forte e tipografia marcante. Feito para bares, cervejarias e churrascarias.', points: ['Fundo escuro e destaques em cobre', 'Títulos grandes e personalidade forte', 'Perfeito para drinks, chope e grelhados'] },
+    minimalista: { name: 'Minimalista', text: 'Branco, preto e muito espaço. Deixa a comida falar por si — ideal para cafés, padarias e cozinhas autorais.', points: ['Layout limpo e sem distrações', 'Fotos grandes e tipografia discreta', 'Carrega rápido até no 4G fraco'] }
+  };
+  var check = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  var panelsBox = $('#model-panels');
+  Object.keys(MODELS).forEach(function (k, i) {
+    var m = MODELS[k];
+    var el = document.createElement('div');
+    el.className = 'model-panel';
+    el.id = 'panel-' + k;
+    el.setAttribute('role', 'tabpanel');
+    el.setAttribute('aria-labelledby', 'tab-' + k);
+    if (i) el.hidden = true;
+    el.innerHTML =
+      '<div class="browser"><div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b>seurestaurante</b>.mesapronta.com.br</span></div>' +
+      '<div class="frame" data-w="1280" data-h="800" ' + (i ? '' : 'data-src="/demo/' + k + '"') + ' data-lazy-src="/demo/' + k + '"><div class="frame-skeleton">Carregando modelo ' + m.name + '…</div></div></div>' +
+      '<div class="model-info"><h3>' + m.name + '</h3><p>' + m.text + '</p><ul>' +
+      m.points.map(function (p) { return '<li>' + check + '<span>' + p + '</span></li>'; }).join('') +
+      '</ul><div class="model-actions"><button type="button" class="btn btn-primary" data-use-theme="' + k + '">Usar este modelo</button>' +
+      '<a class="btn btn-ghost" href="/demo/' + k + '" target="_blank" rel="noopener">Ver site completo <span class="sr-only">(abre em nova aba)</span>' +
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></div></div>';
+    panelsBox.appendChild(el);
+  });
+
+  var tabs = $$('.tab');
+  function selectTab(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      if (on) {
+        var fr = $('.frame', panel);
+        if (!fr.dataset.src) { fr.dataset.src = fr.dataset.lazySrc; }
+        mountFrame(fr);
+      }
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectTab(t); });
+    t.addEventListener('keydown', function (e) {
+      var n = null;
+      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      else if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === 'Home') n = tabs[0];
+      else if (e.key === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); selectTab(n, true); }
+    });
+  });
+
+  lazyFrames(document);
+
+  function goToForm(focusEl) {
+    var sec = $('#cadastro');
+    sec.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    if (focusEl) setTimeout(function () { focusEl.focus({ preventScroll: true }); }, reduceMotion ? 0 : 600);
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-use-theme]');
+    if (b) {
+      var r = document.getElementById('t-' + b.getAttribute('data-use-theme'));
+      if (r) r.checked = true;
+      goToForm($('#f-name'));
+    }
+    var p = e.target.closest('[data-use-plan]');
+    if (p) {
+      $('#f-plan').value = p.getAttribute('data-use-plan');
+      goToForm($('#f-name'));
+    }
+  });
+
+  /* ---------- Planos ---------- */
+  var FALLBACK = {
+    plans: [
+      { id: 'essencial', name: 'Essencial', price: 4900, photos: 12, sections: 1 },
+      { id: 'profissional', name: 'Profissional', price: 7900, photos: 40, sections: 4 },
+      { id: 'premium', name: 'Premium', price: 12900, photos: 120, sections: 10 }
+    ], trialDays: 7
+  };
+  var TAGLINES = { essencial: 'Para começar com o pé direito.', profissional: 'O equilíbrio ideal para a maioria das casas.', premium: 'Para quem quer ir além, com domínio próprio.' };
+  function fmtPrice(cents) {
+    var v = cents / 100;
+    return 'R$ ' + (v % 1 === 0 ? String(v) : v.toFixed(2).replace('.', ','));
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function renderPlans(data) {
+    var trial = data.trialDays || 7;
+    $('#plans-sub').textContent = 'Comece com ' + trial + ' dias grátis em qualquer plano. Sem fidelidade.';
+    var order = ['essencial', 'profissional', 'premium'];
+    var plans = (data.plans || []).slice().sort(function (a, b) { return order.indexOf(a.id) - order.indexOf(b.id); });
+    var sel = $('#f-plan');
+    sel.innerHTML = plans.map(function (p) {
+      return '<option value="' + esc(p.id) + '"' + (p.id === 'profissional' ? ' selected' : '') + '>' + esc(p.name) + ' — ' + fmtPrice(p.price) + '/mês</option>';
+    }).join('');
+    $('#plans').innerHTML = plans.map(function (p) {
+      var feat = p.id === 'profissional';
+      var secs = Number(p.sections) || 0;
+      var items = [
+        'Site completo com 4 modelos',
+        'Cardápio ilimitado',
+        'Reserva pelo WhatsApp + mapa',
+        'Até ' + p.photos + ' fotos na galeria',
+        secs + (secs === 1 ? ' seção livre' : ' seções livres')
+      ];
+      if (p.id === 'premium') items.push('Domínio próprio', 'Suporte prioritário');
+      return '<article class="plan' + (feat ? ' featured' : '') + '">' +
+        (feat ? '<span class="badge">Mais escolhido</span>' : '') +
+        '<h3>' + esc(p.name) + '</h3><p class="tag">' + esc(TAGLINES[p.id] || '') + '</p>' +
+        '<div class="price"><strong>' + fmtPrice(p.price) + '</strong><span>/mês</span></div>' +
+        '<p class="trial">' + trial + ' dias grátis para testar</p>' +
+        '<ul>' + items.map(function (t) { return '<li>' + check + '<span>' + esc(t) + '</span></li>'; }).join('') + '</ul>' +
+        '<button type="button" class="btn ' + (feat ? 'btn-primary' : 'btn-dark') + '" data-use-plan="' + esc(p.id) + '">Começar grátis</button>' +
+        '</article>';
+    }).join('');
+  }
+  renderPlans(FALLBACK);
+  fetch('/api/plans', { headers: { Accept: 'application/json' } })
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(function (d) { if (d && d.plans && d.plans.length) { var cur = $('#f-plan').value; renderPlans(d); if (cur) $('#f-plan').value = cur; } })
+    .catch(function () { /* mantém o fallback */ });
+
+  /* ---------- Reveal on scroll ---------- */
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var rio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); rio.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    $$('.reveal').forEach(function (el) { rio.observe(el); });
+  } else {
+    $$('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- Formulário ---------- */
+  var form = $('#signup');
+  var fName = $('#f-name'), fEmail = $('#f-email'), fPhone = $('#f-phone'), fRest = $('#f-restaurant'),
+      fSlug = $('#f-slug'), fPass = $('#f-pass'), fPass2 = $('#f-pass2'), fTerms = $('#f-terms');
+  var slugWrap = $('#slug-wrap'), slugHint = $('#slug-hint'), errBox = $('#form-error'), btn = $('#submit-btn');
+
+  // Máscara de telefone
+  function maskPhone(v) {
+    var d = v.replace(/\D/g, '').slice(0, 11);
+    if (!d) return '';
+    if (d.length <= 2) return '(' + d;
+    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+  }
+  fPhone.addEventListener('input', function () { fPhone.value = maskPhone(fPhone.value); });
+
+  // Slug
+  function slugify(s) {
+    return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40).replace(/-+$/g, '');
+  }
+  var slugTouched = false, slugTimer = null, slugSeq = 0, slugState = null;
+  function setSlugHint(state, msg) {
+    slugState = state;
+    slugHint.className = 'hint' + (state === true ? ' ok' : state === false ? ' bad' : '');
+    slugWrap.classList.toggle('good', state === true);
+    slugWrap.classList.toggle('bad', state === false);
+    fSlug.setAttribute('aria-invalid', state === false ? 'true' : 'false');
+    slugHint.textContent = msg;
+  }
+  function checkSlug() {
+    clearTimeout(slugTimer);
+    var s = fSlug.value;
+    if (!s) { setSlugHint(null, 'Letras minúsculas, números e hífens.'); return; }
+    if (s.length < 3) { setSlugHint(false, 'Use pelo menos 3 caracteres.'); return; }
+    setSlugHint(null, 'Verificando disponibilidade…');
+    slugTimer = setTimeout(function () {
+      var my = ++slugSeq;
+      fetch('/api/slug-check?slug=' + encodeURIComponent(s))
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (my !== slugSeq || fSlug.value !== s) return;
+          setSlugHint(!!d.available, d.available ? (s + '.mesapronta.com.br está disponível!') : (d.message || 'Endereço indisponível.'));
+        })
+        .catch(function () { if (my === slugSeq) setSlugHint(null, 'Não foi possível verificar agora.'); });
+    }, 350);
+  }
+  fRest.addEventListener('input', function () {
+    if (slugTouched) return;
+    fSlug.value = slugify(fRest.value);
+    checkSlug();
+  });
+  fSlug.addEventListener('input', function () {
+    slugTouched = true;
+    var pos = fSlug.selectionStart;
+    var clean = fSlug.value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-{2,}/g, '-').replace(/^-+/, '').slice(0, 40);
+    if (clean !== fSlug.value) { fSlug.value = clean; try { fSlug.setSelectionRange(pos, pos); } catch (e) {} }
+    if (!fSlug.value) slugTouched = false; // volta a gerar automaticamente se apagar tudo
+    checkSlug();
+  });
+  fSlug.addEventListener('blur', function () {
+    var t = fSlug.value.replace(/-+$/g, '');
+    if (t !== fSlug.value) { fSlug.value = t; checkSlug(); }
+  });
+
+  // Mostrar/ocultar senha
+  var eyeOn = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var eyeOff = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  $$('.pw-toggle').forEach(function (b) {
+    b.innerHTML = eyeOn;
+    b.addEventListener('click', function () {
+      var inp = document.getElementById(b.dataset.target);
+      var show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      b.innerHTML = show ? eyeOff : eyeOn;
+      b.setAttribute('aria-pressed', String(show));
+      b.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+    });
+  });
+
+  function showError(msg, field) {
+    errBox.textContent = msg;
+    errBox.classList.add('show');
+    if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
+  }
+  function clearError() {
+    errBox.classList.remove('show'); errBox.textContent = '';
+    [fName, fEmail, fPhone, fRest, fPass, fPass2].forEach(function (f) { f.removeAttribute('aria-invalid'); });
+  }
+  form.addEventListener('input', function (e) { if (e.target !== fSlug) e.target.removeAttribute && e.target.removeAttribute('aria-invalid'); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearError();
+    var data = {
+      name: fName.value.trim(),
+      email: fEmail.value.trim(),
+      phone: fPhone.value.replace(/\D/g, ''),
+      restaurant: fRest.value.trim(),
+      slug: fSlug.value.replace(/-+$/g, ''),
+      theme: (form.querySelector('input[name="theme"]:checked') || {}).value || 'elegante',
+      plan: $('#f-plan').value || 'profissional',
+      password: fPass.value
+    };
+    if (!data.name) return showError('Informe seu nome.', fName);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return showError('Informe um e-mail válido.', fEmail);
+    if (data.phone.length < 10) return showError('Informe um WhatsApp com DDD.', fPhone);
+    if (!data.restaurant) return showError('Informe o nome do restaurante.', fRest);
+    if (data.slug.length < 3) return showError('Escolha um endereço com pelo menos 3 caracteres.', fSlug);
+    if (slugState === false) return showError(slugHint.textContent || 'Esse endereço não está disponível.', fSlug);
+    if (data.password.length < 8) return showError('A senha precisa ter pelo menos 8 caracteres.', fPass);
+    if (data.password !== fPass2.value) return showError('As senhas não conferem.', fPass2);
+    if (!fTerms.checked) return showError('Para continuar, aceite os termos de uso.', fTerms);
+
+    btn.disabled = true; btn.classList.add('loading');
+    $('.label', btn).textContent = 'Criando seu site…';
+    fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify(data)
+    })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (res.ok && res.d.ok) { $('.label', btn).textContent = 'Pronto! Abrindo seu painel…'; window.location = res.d.redirect || '/painel'; return; }
+        throw new Error(res.d.error || 'Não foi possível criar sua conta. Tente novamente.');
+      })
+      .catch(function (err) {
+        showError(err && err.message && err.message !== 'Failed to fetch' ? err.message : 'Falha de conexão. Verifique sua internet e tente novamente.');
+        btn.disabled = false; btn.classList.remove('loading');
+        $('.label', btn).textContent = 'Criar meu site grátis';
+        errBox.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      });
+  });
+})();
+</script>
+</body>
+</html>
