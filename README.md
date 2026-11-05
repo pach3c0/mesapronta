@@ -1,5 +1,7 @@
 # MesaPronta — micro SaaS de sites para restaurantes
 
+Documentação para quem for continuar o projeto: [HANDOFF.md](HANDOFF.md) e [CONSTITUICAO.md](CONSTITUICAO.md).
+
 ## Rodar
 Precisa do Node 22.5 ou mais novo (usa o SQLite que já vem no Node, sem instalar nada).
 
